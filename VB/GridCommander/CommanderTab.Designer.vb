@@ -1,6 +1,4 @@
-﻿Imports Microsoft.VisualBasic
-Imports System
-Namespace GridCommander
+﻿Namespace GridCommander
 	Partial Public Class CommanderTab
 		''' <summary> 
 		''' Required designer variable.
@@ -75,8 +73,10 @@ Namespace GridCommander
 			Me.cmb_Drives.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor
 			Me.cmb_Drives.Size = New System.Drawing.Size(42, 20)
 			Me.cmb_Drives.TabIndex = 1
-'			Me.cmb_Drives.EditValueChanged += New System.EventHandler(Me.cmb_Drives_EditValueChanged);
-'			Me.cmb_Drives.EditValueChanging += New DevExpress.XtraEditors.Controls.ChangingEventHandler(Me.cmb_Drives_EditValueChanging);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.cmb_Drives.EditValueChanged += new System.EventHandler(this.cmb_Drives_EditValueChanged);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.cmb_Drives.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.cmb_Drives_EditValueChanging);
 			' 
 			' Grid
 			' 
@@ -88,8 +88,10 @@ Namespace GridCommander
 			Me.Grid.Size = New System.Drawing.Size(775, 445)
 			Me.Grid.TabIndex = 1
 			Me.Grid.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() { Me.gridView1})
-'			Me.Grid.Load += New System.EventHandler(Me.Grid_Load);
-'			Me.Grid.KeyDown += New System.Windows.Forms.KeyEventHandler(Me.CommanderTab_KeyDown);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.Grid.Load += new System.EventHandler(this.Grid_Load);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.Grid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommanderTab_KeyDown);
 			' 
 			' gridView1
 			' 
@@ -104,9 +106,12 @@ Namespace GridCommander
 			Me.gridView1.OptionsSelection.MultiSelect = True
 			Me.gridView1.OptionsView.ShowHorzLines = False
 			Me.gridView1.OptionsView.ShowVertLines = False
-'			Me.gridView1.CustomColumnDisplayText += New DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventHandler(Me.gridView1_CustomColumnDisplayText);
-'			Me.gridView1.CustomDrawCell += New DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(Me.gridView1_CustomDrawCell);
-'			Me.gridView1.DoubleClick += New System.EventHandler(Me.gridView1_DoubleClick);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.gridView1.CustomColumnDisplayText += new DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventHandler(this.gridView1_CustomColumnDisplayText);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.gridView1.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridView1_CustomDrawCell);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.gridView1.DoubleClick += new System.EventHandler(this.gridView1_DoubleClick);
 			' 
 			' colAttributes
 			' 
@@ -175,7 +180,8 @@ Namespace GridCommander
 			Me.Controls.Add(Me.panel1)
 			Me.Name = "CommanderTab"
 			Me.Size = New System.Drawing.Size(775, 485)
-'			Me.KeyDown += New System.Windows.Forms.KeyEventHandler(Me.CommanderTab_KeyDown);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CommanderTab_KeyDown);
 			CType(Me.te_CurentText.Properties, System.ComponentModel.ISupportInitialize).EndInit()
 			Me.panel1.ResumeLayout(False)
 			CType(Me.cmb_Drives.Properties, System.ComponentModel.ISupportInitialize).EndInit()

@@ -1,5 +1,4 @@
-﻿Imports Microsoft.VisualBasic
-Imports System
+﻿Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel
 Imports System.Drawing
@@ -11,10 +10,12 @@ Imports System.Windows.Forms
 
 Imports DevExpress.XtraEditors
 Imports DevExpress.XtraEditors.Repository
+Imports DevExpress.XtraGrid.Views.Grid
 
 Namespace GridCommander
 	Partial Public Class CommanderTab
 		Inherits DevExpress.XtraEditors.XtraUserControl
+
 		Private _parent As DirectoryInfo
 		Private _curentDirectory As DirectoryInfo
 		Private Property CurentDirectory() As DirectoryInfo
@@ -36,8 +37,12 @@ Namespace GridCommander
 				Grid.DataSource = infos
 			End Set
 		End Property
+		Private directoryIcon As Icon
+		Private icons As Dictionary(Of String, Icon)
 		Public Sub New()
 			InitializeComponent()
+			directoryIcon = New Icon("../../Resources/Folder-Open.ico")
+			icons = New Dictionary(Of String, Icon)()
 		End Sub
 
 		Private Sub Grid_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Grid.Load
@@ -59,58 +64,62 @@ Namespace GridCommander
 		End Sub
 
 		Private Sub gridView1_DoubleClick(ByVal sender As Object, ByVal e As EventArgs) Handles gridView1.DoubleClick
-			Dim fi As FileSystemInfo = TryCast(gridView1.GetRow(gridView1.FocusedRowHandle), FileSystemInfo)
+			Dim view As GridView = TryCast(sender, GridView)
+			Dim fi As FileSystemInfo = TryCast(view.GetRow(view.FocusedRowHandle), FileSystemInfo)
 			If (fi.Attributes And FileAttributes.Directory) <> FileAttributes.Directory Then
-				Dim p As Process = Process.Start(fi.FullName)
+				Process.Start(fi.FullName)
 			Else
 				CurentDirectory = New DirectoryInfo(fi.FullName)
 			End If
-			Return
 		End Sub
 
-		Private Sub CommanderTab_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs) Handles Grid.KeyDown, MyBase.KeyDown
-			If (e.KeyCode = Keys.Back) AndAlso (CurentDirectory.Parent IsNot Nothing) Then
+		Private Sub CommanderTab_KeyDown(ByVal sender As Object, ByVal e As KeyEventArgs) Handles Grid.KeyDown, Me.KeyDown
+			If e.KeyCode = Keys.Back AndAlso CurentDirectory.Parent IsNot Nothing Then
 				CurentDirectory = CurentDirectory.Parent
 			End If
 		End Sub
 
 		Private Sub gridView1_CustomDrawCell(ByVal sender As Object, ByVal e As DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs) Handles gridView1.CustomDrawCell
-			If e.Column Is colName Then
+			Dim view As GridView = TryCast(sender, GridView)
+			If e.Column = colName Then
 				Dim ic As Icon
-				Dim fa As FileAttributes = CType(gridView1.GetRowCellValue(e.RowHandle, colAttributes), FileAttributes)
+				Dim fa As FileAttributes = CType(view.GetRowCellValue(e.RowHandle, colAttributes), FileAttributes)
 				If (fa And FileAttributes.Directory) = FileAttributes.Directory Then
-					ic = New Icon("../../Resources/Folder-Open.ico")
+					ic = directoryIcon
 				Else
-					Dim path As String = CStr(gridView1.GetRowCellValue(e.RowHandle, colFullName))
-					ic = Icon.ExtractAssociatedIcon(path)
+					Dim path As String = CStr(view.GetRowCellValue(e.RowHandle, colFullName))
+					If Not icons.ContainsKey(path) Then
+						icons.Add(path, Icon.ExtractAssociatedIcon(path))
+					End If
+					ic = icons(path)
 				End If
 				Dim rec As Rectangle = e.Bounds
 				rec.Width = rec.Height
 				rec.Inflate(-2, -2)
 				rec.Offset(1, 1)
-				e.Cache.Graphics.DrawIcon(ic, rec)
+				e.Graphics.DrawIcon(ic, rec)
 			End If
 		End Sub
 
 		Private Sub gridView1_CustomColumnDisplayText(ByVal sender As Object, ByVal e As DevExpress.XtraGrid.Views.Base.CustomColumnDisplayTextEventArgs) Handles gridView1.CustomColumnDisplayText
-			Dim rowHandler As Integer = gridView1.GetRowHandle(e.ListSourceRowIndex)
-			If e.Column Is colName Then
-				Dim s As String = CStr(gridView1.GetRowCellValue(rowHandler, colFullName))
+			Dim view As GridView = TryCast(sender, GridView)
+			If e.Column = colName Then
+				Dim s As String = CStr(view.GetListSourceRowCellValue(e.ListSourceRowIndex, colFullName))
 				If (_parent IsNot Nothing) AndAlso (s = _parent.FullName) Then
 					e.DisplayText = "[..]"
 				Else
-					Dim fa As FileAttributes = CType(gridView1.GetRowCellValue(rowHandler, colAttributes), FileAttributes)
+					Dim fa As FileAttributes = CType(view.GetListSourceRowCellValue(e.ListSourceRowIndex, colAttributes), FileAttributes)
 					If (fa And FileAttributes.Directory) = FileAttributes.Directory Then
 						e.DisplayText = "[" & e.Value & "]"
 					End If
 				End If
 			End If
-			If e.Column Is colSize Then
-				Dim fa As FileAttributes = CType(gridView1.GetRowCellValue(rowHandler, colAttributes), FileAttributes)
+			If e.Column = colSize Then
+				Dim fa As FileAttributes = CType(view.GetListSourceRowCellValue(e.ListSourceRowIndex, colAttributes), FileAttributes)
 				If (fa And FileAttributes.Directory) = FileAttributes.Directory Then
 					e.DisplayText = "<DIR>"
 				Else
-					Dim path As String = CStr(gridView1.GetRowCellValue(rowHandler, colFullName))
+					Dim path As String = CStr(view.GetListSourceRowCellValue(e.ListSourceRowIndex, colFullName))
 					Dim fi As New FileInfo(path)
 					e.DisplayText = fi.Length.ToString()
 				End If
